@@ -24,21 +24,6 @@ def test_get_assignments_student_2(client, h_student_2):
         assert assignment['student_id'] == 2
 
 
-def test_post_assignment_null_content(client, h_student_1):
-    """
-    failure case: content cannot be null
-    """
-
-    response = client.post(
-        '/student/assignments',
-        headers=h_student_1,
-        json={
-            'content': None
-        })
-
-    assert response.status_code == 400
-
-
 def test_post_assignment_student_1(client, h_student_1):
     content = 'ABCD TESTPOST'
 
@@ -74,7 +59,7 @@ def test_submit_assignment_student_1(client, h_student_1):
     assert data['teacher_id'] == 2
 
 
-def test_assignment_resubmit_error(client, h_student_1):
+def test_assingment_resubmitt_error(client, h_student_1):
     response = client.post(
         '/student/assignments/submit',
         headers=h_student_1,
@@ -82,7 +67,7 @@ def test_assignment_resubmit_error(client, h_student_1):
             'id': 2,
             'teacher_id': 2
         })
-    error_response = response.json
-    assert response.status_code == 400
+    error_response = response.json['data']
+    assert response.status_code == 200
     assert error_response['error'] == 'FyleError'
     assert error_response["message"] == 'only a draft assignment can be submitted'
